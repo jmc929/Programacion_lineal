@@ -50,7 +50,42 @@ representa sus costos y su objetivo penalizado con pares de fracciones.
 ## Pruebas
 
 ```powershell
-Set-Location Backend_programación_lineal
-python -m unittest discover -s tests -v
+Set-Location "Backend_programación_lineal"
+py -3 -m unittest discover -s tests -v
 ```
+
+## API HTTP
+
+La API está construida con FastAPI. Desde la raíz del proyecto, instala las
+dependencias y arranca el servidor de desarrollo:
+
+```powershell
+Set-Location "Backend_programación_lineal"
+py -3 -m pip install -r requirements.txt
+py -3 -m uvicorn app.main:app --reload
+```
+
+La documentación interactiva se encuentra en `http://127.0.0.1:8000/docs`.
+`GET /api/health` comprueba el estado del servicio y `POST /api/solve` resuelve
+un problema. Ejemplo de cuerpo JSON:
+
+```json
+{
+  "objective": ["3", "2"],
+  "constraints": [
+    {"coefficients": ["1", "1"], "sense": "<=", "rhs": "4"},
+    {"coefficients": ["1", "0"], "sense": "<=", "rhs": "2"},
+    {"coefficients": ["0", "1"], "sense": "<=", "rhs": "3"}
+  ],
+  "direction": "max",
+  "method": "big_m",
+  "max_iterations": 1000
+}
+```
+
+`objective` y cada restricción deben tener dimensiones consistentes. Los
+coeficientes aceptan enteros JSON o cadenas racionales (`"0.1"`, `"1/3"`);
+los números JSON decimales se rechazan para evitar conversiones implícitas a
+binario. Las fracciones se devuelven como cadenas exactas, por ejemplo `"3/10"`.
+`method` puede ser `"big_m"` o `"revised_simplex"`.
 
