@@ -111,26 +111,34 @@ export function SolverPage() {
 
   return (
     <div className="page-container solver-page">
-      <h2>Solucionador de Programación Lineal</h2>
+      <div className="page-header">
+        <h2>Solucionador de Modelos Lineales</h2>
+        <p>Configura los parámetros, define el sistema de ecuaciones y optimiza con precisión exacta.</p>
+      </div>
 
-      <Card title="Configuración del Problema">
+      <Card title="Parámetros del Problema">
         <div className="config-grid">
           <div className="form-group">
-            <label>Número de Variables de Decisión:</label>
+            <label className="form-label">Cantidad de Variables de Decisión</label>
             <input
               type="number"
               min="1"
               max="20"
+              className="form-input"
               value={variableCount}
               onChange={(e) => handleVariableCountChange(parseInt(e.target.value) || 1)}
             />
           </div>
 
           <div className="form-group">
-            <label>Método de Resolución:</label>
-            <select value={method} onChange={(e) => setMethod(e.target.value)}>
-              <option value="big_m">Método de la Gran M (Big M Tableau)</option>
-              <option value="revised_simplex">Simplex Revisado (Dos Fases)</option>
+            <label className="form-label">Método Algorítmico</label>
+            <select
+              className="form-select"
+              value={method}
+              onChange={(e) => setMethod(e.target.value)}
+            >
+              <option value="big_m">Método de la Gran M (Tableau Simplex)</option>
+              <option value="revised_simplex">Simplex Revisado (Dos Fases Matricial)</option>
             </select>
           </div>
         </div>
@@ -152,9 +160,9 @@ export function SolverPage() {
           onRemoveConstraint={handleRemoveConstraint}
         />
 
-        <div className="action-row">
+        <div className="action-bar">
           <Button variant="primary" onClick={handleSolve} disabled={loading}>
-            {loading ? 'Resolviendo...' : 'Resolver Problema'}
+            {loading ? 'Calculando solución exacta...' : '⚡ Resolver Modelo'}
           </Button>
         </div>
       </Card>

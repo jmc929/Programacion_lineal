@@ -3,8 +3,13 @@ import React from 'react';
 export function Navbar({ activePage, onNavigate }) {
   return (
     <header className="navbar">
-      <div className="navbar-brand" onClick={() => onNavigate('home')} style={{ cursor: 'pointer' }}>
-        <h2>📐 Simplex Solver</h2>
+      <div
+        className="navbar-brand"
+        onClick={() => onNavigate('home')}
+        style={{ cursor: 'pointer' }}
+      >
+        <div className="brand-icon">📐</div>
+        <span className="brand-title">SimplexFlow</span>
       </div>
       <nav className="navbar-nav">
         <button
