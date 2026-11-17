@@ -12,6 +12,27 @@ Para conservar el decimal escrito, los coeficientes pueden pasarse como cadenas
 decimal, no mediante la aproximación binaria interna. Big M se maneja
 simbólicamente como un par de fracciones `(coeficiente de M, término constante)`.
 
+## Ejecución rápida con Docker (Frontend + Backend en un solo contenedor)
+
+Para levantar la aplicación completa (interfaz web en React + backend en FastAPI) con un solo comando:
+
+```bash
+docker compose up --build
+```
+
+O utilizando directamente la imagen Docker:
+
+```bash
+docker build -t linear-solver .
+docker run -p 8000:8000 linear-solver
+```
+
+Una vez iniciado el contenedor:
+- **Interfaz Web (Frontend React):** `http://localhost:8000`
+- **Documentación Interactiva Swagger (API):** `http://localhost:8000/docs`
+- **Endpoint de salud:** `http://localhost:8000/api/health`
+
+
 ## Uso
 
 Desde `Backend_programación_lineal`:
