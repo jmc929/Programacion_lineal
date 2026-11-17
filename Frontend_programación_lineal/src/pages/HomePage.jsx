@@ -5,59 +5,67 @@ export function HomePage({ onNavigate }) {
   return (
     <div className="page-container home-page">
       <section className="hero-section">
-        <h1>📐 Solucionador de Programación Lineal</h1>
+        <div className="hero-badge">
+          <span>✨ Precisión Matemática Exacta</span>
+        </div>
+        <h1>
+          Optimización Lineal con <br />
+          <span className="gradient-text">Aritmética Racional Pura</span>
+        </h1>
         <p className="hero-subtitle">
-          Optimización matemática con <strong>aritmética racional exacta</strong>.
-          Sin aproximaciones ni errores de punto flotante.
+          Resuelve modelos de programación lineal paso a paso sin tolerar errores
+          de redondeo decimal. Soporta <strong>Big M (Tableau)</strong> y <strong>Simplex Revisado en dos fases</strong>.
         </p>
         <div className="hero-actions">
           <Button variant="primary" onClick={() => onNavigate('solver')}>
-            Comenzar a Resolver
+            Abrir Solucionador &rarr;
           </Button>
           <Button variant="secondary" onClick={() => onNavigate('about')}>
-            Conocer los Métodos
+            Ver Teoría y Métodos
           </Button>
         </div>
       </section>
 
-      <section className="features-grid">
-        <Card title="Aritmética Exacta">
+      <div className="features-grid">
+        <div className="feature-card">
+          <div className="feature-icon-wrapper">🎯</div>
+          <h3>Cero Errores de Redondeo</h3>
           <p>
-            Todos los coeficientes y cálculos se gestionan como fracciones puras
-            (<code>fractions.Fraction</code>). Garantiza resultados exactos sin
-            redondeos acumulados.
+            Cada operación se realiza mediante fracciones matemáticas irreducibles
+            (<code>fractions.Fraction</code>), preservando los valores exactos como <code>1/3</code> o <code>0.1</code>.
           </p>
-        </Card>
+        </div>
 
-        <Card title="Método de la Gran M">
+        <div className="feature-card">
+          <div className="feature-icon-wrapper">⚡</div>
+          <h3>Método de la Gran M</h3>
           <p>
-            Resolución mediante <em>Tableau</em> simplex con variables artificiales.
-            La penalización <em>M</em> se manipula simbólicamente como un par exacto{' '}
-            <code>(coeficiente M, constante)</code>.
+            Tratamiento formal y simbólico de <em>M</em> con pares de costos
+            <code>(coeficiente_M, constante)</code>. Visualiza pivoteos e iteraciones del tableau completo.
           </p>
-        </Card>
+        </div>
 
-        <Card title="Simplex Revisado">
+        <div className="feature-card">
+          <div className="feature-icon-wrapper">📊</div>
+          <h3>Simplex Revisado</h3>
           <p>
-            Implementación en dos fases utilizando álgebra de matrices exacta,
-            inversión de base (<em>B<sup>-1</sup></em>) y cálculo de costos reducidos.
+            Inversión explícita de la base <em>B<sup>-1</sup></em>, cálculo de multiplicadores simplex
+            y resolución bifásica para problemas con restricciones <code>&ge;</code> o <code>=</code>.
           </p>
-        </Card>
-      </section>
+        </div>
+      </div>
 
-      <Card title="¿Cómo empezar?" className="getting-started-card">
+      <Card title="Guía Rápida">
         <ol className="steps-list">
           <li>
-            Haz clic en <strong>Comenzar a Resolver</strong>.
+            Haz clic en <strong>Abrir Solucionador</strong> para comenzar.
           </li>
-          <li>Selecciona la cantidad de variables de decisión y el método deseado.</li>
+          <li>Indica el número de variables y elige entre maximizar o minimizar.</li>
           <li>
-            Introduce los coeficientes de la función objetivo y las restricciones (puedes
-            usar enteros como <code>3</code> o fracciones como <code>1/2</code> o <code>0.25</code>).
+            Ingresa los coeficientes como enteros (<code>4</code>) o fracciones (<code>3/4</code>, <code>0.25</code>).
           </li>
           <li>
-            Presiona <strong>Resolver Problema</strong> para ver la solución óptima y
-            cada una de las iteraciones paso a paso.
+            Ejecuta el cálculo para inspeccionar tanto la <strong>solución óptima</strong> como las <strong>tablas de cada iteración</strong>.
           </li>
         </ol>
       </Card>
