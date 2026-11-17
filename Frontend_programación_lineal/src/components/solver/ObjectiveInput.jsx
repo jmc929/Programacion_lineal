@@ -1,16 +1,25 @@
 import React from 'react';
 
 export function ObjectiveInput({
-  objective,
+  objectiveTerms,
   direction,
+  variableCount,
   onDirectionChange,
-  onCoefficientChange,
+  onAddTerm,
+  onRemoveTerm,
+  onTermCoefficientChange,
+  onTermVariableChange,
 }) {
   return (
     <div className="builder-section">
       <div className="builder-title">
-        <span>Función Objetivo</span>
-        <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '0.5rem' }}>
+        <div>
+          <span>Función Objetivo</span>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem', fontWeight: 'normal' }}>
+            Indica solo las variables que aportan a la función objetivo (no necesitas poner 0).
+          </p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <label className="form-label" style={{ margin: 0 }}>Criterio:</label>
           <select
             className="form-select"
@@ -25,23 +34,62 @@ export function ObjectiveInput({
 
       <div className="equation-row">
         <span className="equation-label">{direction.toUpperCase()} Z =</span>
-        {objective.map((coef, index) => (
-          <React.Fragment key={index}>
-            <div className="math-term">
+
+        {objectiveTerms.map((term, tIndex) => (
+          <React.Fragment key={tIndex}>
+            <div className="term-chip">
               <input
                 type="text"
-                value={coef}
-                placeholder="0"
-                onChange={(e) => onCoefficientChange(index, e.target.value)}
-                className="coef-input"
+                value={term.coefficient}
+                placeholder="1"
+                onChange={(e) => onTermCoefficientChange(tIndex, e.target.value)}
+                className="term-input"
+                title="Coeficiente (por defecto 1)"
               />
-              <span className="var-badge">x<sub>{index + 1}</sub></span>
+
+              <select
+                value={term.varIndex}
+                onChange={(e) =>
+                  onTermVariableChange(tIndex, parseInt(e.target.value, 10))
+                }
+                className="term-var-select"
+                title="Variable"
+              >
+                {Array.from({ length: variableCount }, (_, i) => (
+                  <option key={i} value={i}>
+                    x{i + 1}
+                  </option>
+                ))}
+              </select>
+
+              {objectiveTerms.length > 1 && (
+                <button
+                  type="button"
+                  className="btn-remove-term"
+                  onClick={() => onRemoveTerm(tIndex)}
+                  title="Quitar esta variable de la función objetivo"
+                >
+                  &times;
+                </button>
+              )}
             </div>
-            {index < objective.length - 1 && (
+
+            {tIndex < objectiveTerms.length - 1 && (
               <span className="math-operator">+</span>
             )}
           </React.Fragment>
         ))}
+
+        {objectiveTerms.length < variableCount && (
+          <button
+            type="button"
+            className="btn-add-term"
+            onClick={onAddTerm}
+            title="Añadir otra variable a la función objetivo"
+          >
+            + Variable
+          </button>
+        )}
       </div>
     </div>
   );
