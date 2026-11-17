@@ -1,0 +1,11 @@
+services:
+  linear-solver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linear_solver_app
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
