@@ -31,6 +31,26 @@ def choose_leaving_row(tableau, basis, entering_column, rhs_column):
     return min(candidates)[2]
 
 
+def compute_ratio_test(column_values, rhs_values, basis, variable_names, leaving_row=None):
+    """Build detailed minimum-ratio test entries for step-by-step display."""
+    entries = []
+    for row_index, (coeff, rhs_val) in enumerate(zip(column_values, rhs_values)):
+        eligible = coeff > 0
+        ratio = (rhs_val / coeff) if eligible else None
+        entries.append(
+            {
+                "row": row_index,
+                "basic_variable": variable_names[basis[row_index]],
+                "rhs": rhs_val,
+                "pivot_column_value": coeff,
+                "ratio": ratio,
+                "eligible": eligible,
+                "is_minimum": (leaving_row is not None and row_index == leaving_row),
+            }
+        )
+    return entries
+
+
 def choose_entering_column(reduced_costs, allowed_columns=None):
     allowed = set(range(len(reduced_costs))) if allowed_columns is None else set(allowed_columns)
     return next(
