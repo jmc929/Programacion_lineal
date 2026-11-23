@@ -18,10 +18,14 @@ def _validate_rational_input(value):
             "Los coeficientes deben ser enteros o cadenas racionales; "
             'por ejemplo: 2, "0.25" o "1/4".'
         )
+    if isinstance(value, str) and not value.strip():
+        raise ValueError("No se permiten campos vacíos en coeficientes o lados derechos.")
     try:
         Fraction(value)
-    except (ValueError, ZeroDivisionError):
-        raise ValueError("El valor debe representar una fracción válida.") from None
+    except ZeroDivisionError:
+        raise ValueError("No se permite división por cero en una fracción.") from None
+    except ValueError:
+        raise ValueError("El valor debe representar un número o fracción válida.") from None
     return value
 
 
@@ -46,6 +50,7 @@ class ProblemRequest(BaseModel):
     constraints: list[ConstraintRequest] = Field(default_factory=list)
     direction: Literal["max", "min"] = "max"
     method: Literal["big_m", "revised_simplex"] = "big_m"
+    mode: Literal["step_by_step", "direct"] = "step_by_step"
     max_iterations: int = Field(default=1000, strict=True, ge=1, le=10000)
 
     @model_validator(mode="after")

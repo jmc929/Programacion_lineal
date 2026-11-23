@@ -4,19 +4,22 @@ export function ObjectiveInput({
   objectiveTerms,
   direction,
   variableCount,
+  invalidFields = {},
   onDirectionChange,
   onAddTerm,
   onRemoveTerm,
   onTermCoefficientChange,
   onTermVariableChange,
 }) {
+  const usedVars = new Set(objectiveTerms.map((t) => t.varIndex));
+
   return (
     <div className="builder-section">
       <div className="builder-title">
         <div>
           <span>Función Objetivo</span>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem', fontWeight: 'normal' }}>
-            Indica solo las variables que aportan a la función objetivo (no necesitas poner 0).
+            Indica los términos que participan (puedes usar enteros, decimales como 0.5 o fracciones como 3/4).
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
@@ -35,50 +38,57 @@ export function ObjectiveInput({
       <div className="equation-row">
         <span className="equation-label">{direction.toUpperCase()} Z =</span>
 
-        {objectiveTerms.map((term, tIndex) => (
-          <React.Fragment key={tIndex}>
-            <div className="term-chip">
-              <input
-                type="text"
-                value={term.coefficient}
-                placeholder="1"
-                onChange={(e) => onTermCoefficientChange(tIndex, e.target.value)}
-                className="term-input"
-                title="Coeficiente (por defecto 1)"
-              />
+        {objectiveTerms.map((term, tIndex) => {
+          const isInvalid = Boolean(invalidFields[`obj-${tIndex}`]);
+          return (
+            <React.Fragment key={tIndex}>
+              <div className={`term-chip ${isInvalid ? 'input-error' : ''}`}>
+                <input
+                  type="text"
+                  value={term.coefficient}
+                  placeholder="coef"
+                  onChange={(e) => onTermCoefficientChange(tIndex, e.target.value)}
+                  className="term-input"
+                  title="Coeficiente numérico (entero, decimal o fracción)"
+                />
 
-              <select
-                value={term.varIndex}
-                onChange={(e) =>
-                  onTermVariableChange(tIndex, parseInt(e.target.value, 10))
-                }
-                className="term-var-select"
-                title="Variable"
-              >
-                {Array.from({ length: variableCount }, (_, i) => (
-                  <option key={i} value={i}>
-                    x{i + 1}
-                  </option>
-                ))}
-              </select>
-
-              {objectiveTerms.length > 1 && (
-                <button
-                  type="button"
-                  className="btn-remove-term"
-                  onClick={() => onRemoveTerm(tIndex)}
-                  title="Quitar esta variable de la función objetivo"
+                <select
+                  value={term.varIndex}
+                  onChange={(e) =>
+                    onTermVariableChange(tIndex, parseInt(e.target.value, 10))
+                  }
+                  className="term-var-select"
+                  title="Variable"
                 >
-                  &times;
-                </button>
-              )}
-            </div>
+                  {Array.from({ length: variableCount }, (_, i) => (
+                    <option
+                      key={i}
+                      value={i}
+                      disabled={usedVars.has(i) && term.varIndex !== i}
+                    >
+                      x{i + 1}
+                    </option>
+                  ))}
+                </select>
 
-            {tIndex < objectiveTerms.length - 1 && (
-              <span className="math-operator">+</span>
-            )}
-          </React.Fragment>
-        ))}
+                {objectiveTerms.length > 1 && (
+                  <button
+                    type="button"
+                    className="btn-remove-term"
+                    onClick={() => onRemoveTerm(tIndex)}
+                    title="Quitar esta variable de la función objetivo"
+                  >
+                    &times;
+                  </button>
+                )}
+              </div>
+
+              {tIndex < objectiveTerms.length - 1 && (
+                <span className="math-operator">+</span>
+              )}
+            </React.Fragment>
+          );
+        })}
 
         {objectiveTerms.length < variableCount && (
           <button
